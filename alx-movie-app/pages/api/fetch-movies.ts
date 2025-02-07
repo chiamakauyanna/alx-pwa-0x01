@@ -27,8 +27,13 @@ export default async function handler(
                 movies,
             });
         } catch (error) {
-            return response.status(500).json({ error: error.message });
+            if (error instanceof Error) {
+                return response.status(500).json({ error: error.message });
+            } else {
+                return response.status(500).json({ error: "An unknown error occurred" });
+            }
         }
+        
     } else {
         response.setHeader("Allow", ["POST"]);
         response.status(405).end(`Method ${request.method} Not Allowed`);
